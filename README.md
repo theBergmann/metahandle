@@ -4,6 +4,9 @@ MetaHandle is a tool to access onchain content on Bitcoin SV (BSV). Instead of a
 
 To run it on your own server, you need to just put the two files on the public html folder.
 
+# documentation
+You can load the file docu.html to see the full docu. Or just load it online on https://www.metahandle.net/docu.html
+
 # dependencies
 
 MetaHandle requires the following libraries:
