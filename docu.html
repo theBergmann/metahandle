@@ -1,0 +1,184 @@
+<html>
+<head>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+     <link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet"> 
+    <script type="text/javascript" src="https://unpkg.com/bsv@0.26.4/bsv.min.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .searchinput {
+            width:95%;
+            max-width:500px;
+            height:2em;
+        }
+        
+        h1,h2,h3 a {
+            text-decoration: none;
+            color:black;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            #searchbutton {
+                margin-top:10px;
+                width:95%;
+                max-width:400px;
+                height:2.5em;
+            }
+        }
+        
+        @media only screen and (min-width: 601px) {
+            #searchbutton {
+                margin-top:-3px;
+                height:2.4em;
+            }
+        }
+        
+        p {
+            text-align:left;
+            margin-left:20%;
+            margin-right:20%;
+        }
+        
+        #headline {
+            width:100%:
+            max-width:600px;
+        }
+        
+        #headline a:hover {
+            text-decoration:none;
+        }
+        
+        .area {
+            height:6em;
+        }
+        
+        .store {
+            margin-bottom:4px;
+        }
+        
+        #check1 {
+            width:95%;
+            max-width:500px;
+            text-align:left;
+            margin:auto;
+            margin-top:8px;
+        }
+        
+        #check2 {
+            width:95%;
+            max-width:500px;
+            text-align:left;
+            margin:auto;
+            margin-top:-8px;
+        }
+        
+        #checkbox {
+            margin-top:2px;
+        }
+    
+        .search {
+            text-align:left;
+            width:95%;
+            max-width:900px;
+            margin:auto;
+        }
+        
+        #mbutton {
+            text-align:center;
+        }
+        
+        #tipbutton {
+            position: relative;
+            padding: 10px;
+            margin-top:30px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+    <script>
+    function submitform(){
+        document.getElementById('form').submit();
+    }
+    function crawl() {
+        window.location = "metahandle.php";
+    }
+    
+    function store() {
+        window.location = "metahandle.php?store=1";
+    }
+    </script>
+</head>
+
+<body class="text-center">
+    <div id="headline">
+        <a href="metahandle.php">
+            <pre><font size="10">Metahandle</font></pre>
+            <pre><font size="5">Store or Crawl a Metahandle</font></pre><br/>
+        </a>
+    </div>
+    <button type="button" class="btn btn-outline-info btn-lg" onclick="crawl()">Crawl</button>
+    <button type="button" class="btn btn-outline-success btn-lg " onclick="store()" style="margin-left:1em">Store</button>
+    <br /><br /><br />
+    <div class="info">
+        <h3>What is MetaHandle?</h3>
+        <font size="4"><p>A major problem of onchain content is that it is referenced by a transaction id, which is impossible to memorize. The result is that you need to keep long lists of bookmarks with onchain links or transaction ids.</p>
+        <p>MetaHandles solves this problem by introducing human readable references for txids, which are stored onchain. This allows you to bookmark or tag any onchain file with an immutable handle which is always accesable.</p>
+        <p>MetaHandles can be used in a lot of ways, both privately and publically. They are basically just <em>any</em> reference to any txid.</p>
+        <h3>Quick Start</h3>
+        <p>You don't want to forget an onchain file you found? Just store it as a handle.</p><p>Click on the Store button, set a handle, copy the transaction id, write a title and a description. If you want to use your handle only as a private bookmark, activate encryption of the txid. If you want your handle to be publicly shown on the metahandle site, activate "publicize handle". In this case your handle will be stored in our database.</p>
+        <p>When you have stored your handle you can access your files by crawling the handle.</p>
+        <h3>Data Structure</h3>
+        <p>The data structure of MetaHandles is very simple. It can be extended with further use cases:</p>
+        <p><em>OP_RETURN '1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU' H(handle) VersionNumber txid E(title) E(description) salt</em></p>
+        <p>A MetaHandle is an OP_RETURN output of a transaction containing these parts:</p>
+        <p><b>s0: BitCom address.</b><br /> The address 1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU identifies a transaction as a handle. I registered it as a application with the BitCom protocol. It would not have been needed now, but will make it easier to filter the blockchain on scale.</p>
+        <p><b>s1: Hash of Handle.</b><br /> A hash of the handle. This has the effect that you can only find the handle if you actually know it. It prevents arbitrary searchability of handles, while allowing everybody to use them privately. I used SHA256.</p>
+        <p><b>s2: VersionNumber</b><br />VersionNumber is in format 010101 and explains how to decrypt a handle. First two digits specify the main type of handle, second two digits the subtype, and last two digits the version of it. This allows to create a large variety of handles and to release updated versions of it. Currently version 010102 and 010202 exist.</p>
+        <p><b>s3: txid</b><br />The transaction ID of the onchain content the handles references to. In 010102 it is unencrypted, in 010202 it is encrypted. Encryption helps to protect private handles against face entries, but it eliminates cross references, which is why the default handles stores the unencrypted.</p>
+        <p><b>s4 + s5: Title and Description</b><br />Title and Description of the handle are encrypted with AES, using the Handle itself as a password and the salt in s6. Encryption is not made to provide absolute secrecy - it can given a strong password as a handle - but rather to prevent searchabillity.
+        <h3>How to use MetaHandles</h3>
+        <p>There are many methods to use MetaHandles. They are just a human readable reference to a transaction ID. Some suggestions how to use it:</p>
+        <p><b>Handle = Password</b><br /> Use the handle as your private list of bookmarked content onchain. You can use as many passwords as you want. My current implementation only querries 20 entries for each handle, but this can easily be changed in the future. For private lists it is recommended to encrypt the txid.</p>
+        <p><b>Handle = Username</b><br />
+        Use the handle to curate your list of favorite onchain content. </p>
+        <p><b>Handle = Document Name</b><br />Reference a single document file like "myimportantfile-2019-07-13.pdf". </p>
+        <p><b>Handle = Tag</b><br />Make onchain content searchable by reference it with a tag. As an example you could look at the <a href="metahandle.php?handle=Games">Handle "Games"</a>. Another example is <a href="metahandle.php?handle=Metahandle">the tag Metahandle itself</a>. Here we store important information about MetaHandles.</p>
+        <h3>Collissions</h3>
+        <p>MetaHandles are <b>not</b> collission resistent. You can create as many of the same handles as you like.</p>
+        <p>For searching purposes like tagging of content this is not a but, but a feature: It allows to make the MetaNet searchable. In the future there will be a need to create algorithms to sort handles (due to age, likes, attached BSV ...)</p>
+        <p>For some purposes any collision is unwanted. If you have your private collection of bookmarks, you don't want anybody to be able to introduce collisions in your files. Even if you use a strong password, an attacker would be able to copy your handle and replace the txid. This would not do much harm, but be an inconvenience. For this private collections should encrypt the txid too. This makes them resistent against collision.</p>
+        <p>It is possible to create public collision resistent schemes on top of MetaHandles. There could be types of validated / signed Handles and a BitCom instruction mandating that only the valid handle is showed.</p>
+        <h3>Further cases</h3>
+        <p>The current implementation of MetaHandles is only made to allow to remember and tag files. This was the reason I had the idea and created it, after I realized that it is not hard to do so. But in the process I realized that you can use MetaHandles for a large variety of purporses:</p>
+        <p><b>Attestation / Validation</b><br />It is possible to attach a signature signed by the private key for the address having created the onchain content. This would validate a handle and could give it some kind of authorative state. Such a handle type is something I want to create in the close future, but it requires to improve the sorting and querrying algorithm.</p>
+        <p><b>Domain Name System:</b><br />On base of validated handles you could build a domain name system for the MetaNet. I already have some scheme in mind I think could allow you to basically create a domain system with a set of handles.</p>
+        <p><b>Information has Value</b><br />The MetaNet merges information and value. Value of attached BSV  for example as an unspent output in the transaction creating the content - should be an obvious indicator of how important any content is. On scale it might be needed to attach BSV to a information to make sure that it is not pruned from most nodes. However, it is hard to attach BSV to a transaction ID after you sent it, and even harder if not the content creator but someone else wants to preserve the information. With MetaHandles you can easily attach value to any txid: Reference it and leave an unspent output in the handle transaction.</p><p>        In the same regard, sorting MetaHandles by value can help to create an internet, in which information and value are tightly merged. You can also allow users to like (or dislike) a handle by creating a transaction referencing to a handle an having unspent outputs.</p>
+        <p><b>Technical References</b><br />You can use the TXID as the handle. This would allow to querry additional information for any TXID. Such a technical handle allows to add all kind of metadata to a TXID, like announcing that it is outdated and redirecting to a newer version, or instructions to the maintainer of block explorers how to handle the content.</p>
+        
+        </div>
+    <div id="mbutton"></div>
+       
+<script src="https://www.moneybutton.com/moneybutton.js"></script>
+
+<div id="hello" class="search"></div>
+<div id="tipbutton">
+    <div class="money-button"
+      data-to="1BergmanNpFqZwALMRe8GHJqGhtEFD3xMw",
+      data-amount="0.01",
+      data-currency="USD",
+      data-editable="true",
+      data-label="Tip us!"
+    ></div>
+    
+    
+</div>
+</body>
+</html>
+
+<!-- https://github.com/odedhb/AES-encrypt/blob/master/index.html -->
