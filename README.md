@@ -7,7 +7,9 @@ MetaHandle is a tool to access onchain content on Bitcoin SV (BSV). Instead of a
 MetaHandle requires the following libraries:
 
 https://github.com/dchest/scrypt-async-js
+
 https://github.com/moneybutton/bsv
+
 https://github.com/ricmoo/aes-js
 
 # documentation
