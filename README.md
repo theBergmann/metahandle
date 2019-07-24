@@ -18,11 +18,11 @@ A MetaHandle is a BSV transaction putting a specifically structured content in t
 
 This is the structure of the OP_Return output:
 
-"s1": "1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU",
+`"s1": "1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU",
 "s2": [Hash(handle)],
 "s3": [VersionNumber],
 "s4": [txid],
-"s5" - "sn": [any meta data]
+"s5" - "sn": [any meta data]`
 
 s1 is the BitCom address of MetaHandle. It is registered, but only filled with documentary content. It allows to identify a handle transaction. 
 s2 is the Hash of the Handle. When the user knows the name of the handle, he can search for the hash. This allows to keep a handle private. Currently SHA256 is used, but it can be updated if required.
@@ -34,7 +34,7 @@ Currently existing VersionNumbers are 010102 and 010202. Both interprete s5-sn i
 
 You can load the file docu.html to see the full docu. 
 
-You can make a full search and view of handles with crawler2.php?handle=[handle]. This will show the full handle transaction.
+You can make a full search and view of handles with `crawler2.php?handle=[handle]`. This will show the full handle transaction.
 
 # collisions and privacy
 
@@ -51,4 +51,5 @@ I updated MetaHandles from version -0.1 to version 0.0. During this I changed th
 # links
 
 https://metahandle.net/
- https://metahandle.net/docu.html
+
+https://metahandle.net/docu.html
