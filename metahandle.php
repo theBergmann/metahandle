@@ -17,108 +17,7 @@
   <script src="//unpkg.com/qrcode-generator"></script>
         <script src="encrypt.js" ></script>
     <link rel="icon" type="image/png" href="handle-favicon.png">
-
-    
-        
-        
-    <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-        }
-        
-        .searchinput {
-            width:95%;
-            max-width:500px;
-            height:2em;
-        }
-        
-        h1,h2,h3 a {
-            text-decoration: none;
-            color:black;
-        }
-        
-        @media only screen and (max-width: 600px) {
-            #searchbutton {
-                margin-top:10px;
-                width:95%;
-                max-width:400px;
-                height:2.5em;
-            }
-        }
-        
-        @media only screen and (min-width: 601px) {
-            #searchbutton {
-                margin-top:-3px;
-                height:2.4em;
-            }
-        }
-        
-        
-        
-        #headline {
-            width:100%:
-            max-width:600px;
-        }
-        
-        #headline a:hover {
-            text-decoration:none;
-        }
-        
-        .area {
-            height:6em;
-        }
-        
-        .store {
-            margin-bottom:4px;
-        }
-        
-        #check1 {
-            width:95%;
-            max-width:500px;
-            text-align:left;
-            margin:auto;
-            margin-top:8px;
-        }
-        
-        #check2 {
-            width:95%;
-            max-width:500px;
-            text-align:left;
-            margin:auto;
-            margin-top:-8px;
-        }
-        
-        #checkbox {
-            margin-top:2px;
-        }
-    
-        .search {
-            text-align:left;
-            width:95%;
-            max-width:900px;
-            margin:auto;
-        }
-        
-        #mbutton {
-            text-align:center;
-        }
-        
-        #tipbutton {
-            position: relative;
-            padding: 10px;
-            margin-top:30px;
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
-        
-        #mbuttonload {
-            margin-top: -43px;
-            margin-left:-75px;
-            
-        }
-        
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <script>
@@ -134,6 +33,8 @@
     }
     
     function button() { 
+        
+        // encrypt title, description and optionaly txid.         
         var salt = generateId(128);
         create_aes_key(handle, salt);
         encrypt_it(description);
@@ -149,13 +50,14 @@
             txid = txidd;
             version_number = "010102";
         }
+        
+        // compose data for opreturn
         var returndata = bsv.Script.buildDataOut(['1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', "" + handlehashin, "" + version_number, "" + txid, "" + enctitle, "" + encdesc, "" + salt]).toASM();
         
-        
-        
-        
+        // loading gif while MoneyButton loads
         document.getElementById("mbuttonload").innerHTML = "<img src='https://acegif.com/wp-content/uploads/loading-40.gif' width=60px />";
         
+        // create MoneyButton
         const div = document.getElementById("mbutton");
         moneyButton.render(div, {
           outputs: [{
@@ -171,7 +73,7 @@
           onError: function (arg) { console.log('onError', arg) }
         });
         
-        
+        // create ProxyPay
         let privKey = bsv.PrivateKey.fromRandom();
         const payment = proxypay({
             key: privKey,
@@ -184,7 +86,9 @@
     }
 </script>
 <?php
-        
+        // load variables with post. Handle can be obtained by post and get, but has different variables (handlie and handle)
+        // Variables like "store", "newhandle", "savehandlename", "publicizehandle" tell the site what to do
+        // Variables like "txid", "title", "type", "public" etc. forward components of the handle
         $action = $_GET["store"];
         $handlie = $_GET["handle"];
         $handle = $_POST["handle"];
@@ -196,6 +100,8 @@
         $public = $_POST["public"];
         $savehandlename = $_POST["savehandlename"];
         $publicizehandle = $_POST["publicizehandle"];
+    
+        // when the handle is public, we test if it is already here. If, the counter increases, if not, it is put into the database
         if (isset($public)) {
             if ($public == 1) {
                 $num = 2;
@@ -208,7 +114,7 @@
         }
         if (isset($publicizehandle)) {
             if ($publicizehandle == 2) {
-                $db = mysqli_connect('localhost', 'mobymomk_system', 'Dead99preZ', 'mobymomk_mobybit');
+                $db = mysqli_connect('...');
                 $handledb = mysqli_query($db, "SELECT * FROM Handles");
                 $newentry = 1;
                 while($row = mysqli_fetch_object($handledb)) {
@@ -238,30 +144,39 @@
             }
         } 
         
+        // if no type is set, it is handle 010102    
         if (!isset($type)) {
             $type = 1;
         }
+    
+        // if a handle was typed in, it is hashed. Ripemd160 is still here because it was used for handle type 010101 (formerly 1).
         if (isset($handle)) {
             $handlehash = hash('sha256', $handle);
             $handlehashripe = hash('ripemd160', $handle);
+            // The handle is passed from php to javascript
             echo "<script>handle=\"" . $handle . "\"; handlehash=\"" . $handlehash . "\"; handlehashripe=\"" . $handlehashripe . "\"; </script>";
             echo "<body class='text-center'>"; 
         }
+    
+        // Same happens, when the handle is obtained with GET
         if (isset($handlie)) {
             $handlehash = hash('sha256', $handlie);
             $handlehashripe = hash('ripemd160', $handlie);
             echo "<script>handle=\"" . $handlie . "\"; handlehash=\"" . $handlehash . "\"; handlehashripe=\"" . $handlehashripe . "\";</script>";
             echo "<body class='text-center'>"; 
         }
+        // if the variable newhandle exists, it is hashed too
         else if (isset($newhandle)) {
             $handlehash = hash('sha256', $newhandle);
             echo "<script>handle=\"" . $newhandle . "\"; description=\"" . $description . "\"; handlehashin=\"" . $handlehash . "\"; title=\"" . $title . "\"; type=\"" . $type . "\";</script>";
             echo "<script>txidd=\"" . $txid . "\";</script>";
             echo "<body onload='button()' class='text-center'>";
         }
+    
+        // if no handle is set, we are on the homepage. Then load the public handles from the database
         else {
              echo "<body class='text-center'>";
-             $db = mysqli_connect('localhost', 'mobymomk_system', 'Dead99preZ', 'mobymomk_mobybit');
+             $db = mysqli_connect('...');
              $handledb = mysqli_query($db, "SELECT * FROM Handles");
              $frontpage = 1;
         }
@@ -273,11 +188,14 @@
         </a>
         <button type="button" class="btn btn-outline-info btn-lg" onclick="crawl()">Crawl</button>
         <button type="button" class="btn btn-outline-success btn-lg " onclick="store()" style="margin-left:1em">Store</button>
-        <br /><br /><a href="docu.html">What is this about? Read the docu!</a><br /><br />
+        <br /><br /><a href="docu.html">What is this about? Read the docu!</a><br /><br /><br />
         <div id="info"></div>
         <div id="mbutton"></div>
         <div id="mbuttonload"></div>
+   
         <?php
+    
+        // when creating a handle, a form to get data
         if (isset($action)) {
             echo "<form action='metahandle.php' method='post'>
             <input type='text' name='newhandle' placeholder=
@@ -302,6 +220,8 @@
             <button type='submit' class='btn btn-info btn-lg '>Create Handle with MoneyButton or ProxyPay</button>
         </form>";
         }
+    
+        // When homepage, show public handles 
         if (!isset($action) and !isset($handle) and !isset($newhandle)) {
             echo "
             <form action='metahandle.php' method='post'>
@@ -329,9 +249,8 @@
         ?>
 </div>
         
-
 <script>
-
+// if handlehash is defined, it starts to querry the hash at babel.
 var query = {
   "v": 3,
   "q": {
