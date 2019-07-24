@@ -38,7 +38,7 @@ You can make a full search and view of handles with crawler2.php?handle=[handle]
 
 # collisions and privacy
 
-MetaHandles are not collision resistent. There can exist a lot of references on one handle. For example, "blog"(https://metahandle.net/metahandle.php?handle=blog) already contains six references. In this case MetaHandles are used like a tagging system. 
+MetaHandles are not collision resistent. There can exist a lot of references on one handle. For example, ["blog"](https://metahandle.net/metahandle.php?handle=blog) already contains six references. In this case MetaHandles are used like a tagging system. 
 
 If you pick a longer handle, like a good password, you can create collision resistency. In this case the handle can be used privately. To prevent others learning about the referenced txid and to protect against someone spamming your handle with other txids, the txid itself can be encrypted too. 
 
@@ -51,4 +51,4 @@ I updated MetaHandles from version -0.1 to version 0.0. During this I changed th
 # links
 
 https://metahandle.net/
-https://metahandle.net/docu.html
+ https://metahandle.net/docu.html
