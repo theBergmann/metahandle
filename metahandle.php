@@ -11,7 +11,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
     <script src="scrypt-async.js" ></script>
     <script src="aes-js.js" ></script>
-        <script src="bsv.min.js" ></script>
+          <script src="//cdn.jsdelivr.net/npm/vue"></script>
+  <script src="//unpkg.com/bsv@0.27.2"></script>
+  <script src="//unpkg.com/proxypay/dist/proxypay.min.js"></script>
+  <script src="//unpkg.com/qrcode-generator"></script>
         <script src="encrypt.js" ></script>
     <link rel="icon" type="image/png" href="handle-favicon.png">
 
@@ -108,6 +111,13 @@
             left: 0;
             right: 0;
         }
+        
+        #mbuttonload {
+            margin-top: -43px;
+            margin-left:-75px;
+            
+        }
+        
     </style>
 </head>
 
@@ -140,6 +150,12 @@
             version_number = "010102";
         }
         var returndata = bsv.Script.buildDataOut(['1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', "" + handlehashin, "" + version_number, "" + txid, "" + enctitle, "" + encdesc, "" + salt]).toASM();
+        
+        
+        
+        
+        document.getElementById("mbuttonload").innerHTML = "<img src='https://acegif.com/wp-content/uploads/loading-40.gif' width=60px />";
+        
         const div = document.getElementById("mbutton");
         moneyButton.render(div, {
           outputs: [{
@@ -153,7 +169,18 @@
              document.getElementById("mbutton").innerHTML="<form action='metahandle.php' method='post' id='form'><input type='hidden' name='handle' value='" + handle + "'><input type='hidden' name='publicizehandle' value='" + publicize + "'><input type='hidden' name='savehandlename' value='" + handle + "'><img src='owlwithtie.jpg' onload='submitform()'></form>";
           },
           onError: function (arg) { console.log('onError', arg) }
+        });
+        
+        
+        let privKey = bsv.PrivateKey.fromRandom();
+        const payment = proxypay({
+            key: privKey,
+            outputs: [
+                { data: ['1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', ' ', handlehashin, ' ', version_number, ' ', txid, ' ', enctitle, ' ', encdesc, ' ', salt] }
+            ],
+            onPayment(tx) { document.getElementById("mbutton").innerHTML="<form action='metahandle.php' method='post' id='form'><input type='hidden' name='handle' value='" + handle + "'><input type='hidden' name='publicizehandle' value='" + publicize + "'><input type='hidden' name='savehandlename' value='" + handle + "'><img src='owlwithtie.jpg' onload='submitform()'></form>" }
         })
+        document.getElementById("proxypay").innerHTML = `<br /><strong>No MoneyButton? No problem!</strong><br /> Fund the handle-transaction with ProxyPay by sending:<br /> ${ payment.fee } satoshis to <b>${ payment.address }</b> <br />or use this payment URI (click or copy to your send field)<br /> <a href='` +  payment.bip21URI + `'>` + payment.bip21URI + `</a><br /><img src='https://api.qrserver.com/v1/create-qr-code/?data=` + payment.bip21URI + `&size=130x130&margin=10' />`;
     }
 </script>
 <?php
@@ -181,7 +208,7 @@
         }
         if (isset($publicizehandle)) {
             if ($publicizehandle == 2) {
-                $db = mysqli_connect('localhost', '...', '...', '...');
+                $db = mysqli_connect('localhost', 'mobymomk_system', 'Dead99preZ', 'mobymomk_mobybit');
                 $handledb = mysqli_query($db, "SELECT * FROM Handles");
                 $newentry = 1;
                 while($row = mysqli_fetch_object($handledb)) {
@@ -239,7 +266,6 @@
              $frontpage = 1;
         }
 ?>
-<!--<body>-->
     <div id="headline">
         <a href="metahandle.php">
             <h1><font size="10">Metahandle</font></h1>
@@ -250,6 +276,7 @@
         <br /><br /><a href="docu.html">What is this about? Read the docu!</a><br /><br />
         <div id="info"></div>
         <div id="mbutton"></div>
+        <div id="mbuttonload"></div>
         <?php
         if (isset($action)) {
             echo "<form action='metahandle.php' method='post'>
@@ -269,10 +296,10 @@
              <div class='form-check' id='check2'>
                   <input class='form-check-input' name='public' type='checkbox' value='1' id='checkbox'>
                   <label class='form-check-label' for='checkbox'>
-                    <pre><abbr title='lol'>Publicize Handle</abbr></pre>
+                    <pre><abbr title='Make your Handle public visible on our homepage'>Publicize Handle</abbr></pre>
                   </label>
             </div>
-            <button type='submit' class='btn btn-info btn-lg '>Create MoneyButton</button>
+            <button type='submit' class='btn btn-info btn-lg '>Create Handle with MoneyButton or ProxyPay</button>
         </form>";
         }
         if (!isset($action) and !isset($handle) and !isset($newhandle)) {
@@ -288,7 +315,7 @@
                 while($row = mysqli_fetch_object($handledb)) {
                     $amount = $row->Amount;
                     $thishandle = $row->Handle;
-                    $publichandles[] = array( "amount" => $amount,
+                    $publichandles[] = array(                                     "amount" => $amount,
                         "handle" => $thishandle,);
                 }
                 rsort($publichandles);
@@ -319,8 +346,7 @@ var query = {
   },
  "r": {
     "f": "[.[] | .out[0] | {Addr: \"\\(.s1)\", Handle: \"\\(.s2)\", VersionNumber: \"\\(.s3)\", Txid: \"\\(.s4)\", Title: \"\\(.s5)\", Description: \"\\(.s6)\", Salt: \"\\(.s7)\"}]"
-    /*"f": "[{ block: .blk.i, timestamp: .blk.t, VersionNumber: .out[1].s3, Txid: .out[1].s4, Title: .out[1].s5, Description: .out[1].s6, Salt: .out[1].s7 }]"*/
-  }
+   }
 }
 
 var b64 = btoa(JSON.stringify(query));
@@ -378,45 +404,7 @@ fetch(url, header).then(function(r) {
            k = k+1;
        }
   })
-  /* r["u"].forEach(function(output) {
-       var salt = output.Salt;
-       if (output.VersionNumber == "010102" || output.VersionNumber == "010202") {
-            create_aes_key(handle, salt);
-       }
-       if (output.VersionNumber == "010101" || output.VersionNumber == "010201" ) {
-            create_aes_key_old(handle, salt);
-       }
-       VersionNumber = output.VersionNumber;
-       if (output.VersionNumber == "010102" || output.VersionNumber == "010202" || output.VersionNumber == "010102" || output.VersionNumber == "010202") {
-            decrypt_it(output.Title);
-            Title = decryptedText;
-            decrypt_it(output.Description);
-            Description = decryptedText;
-       }
-       if (output.VersionNumber == "010201") {
-           decrypt_it(output.Txid);
-           Txid = decryptedText;
-       }
-       else {
-           Txid = output.Txid;
-       }
-       
-       alreadyhere = 0;
-       for (m=0; m<results.length; m++) {
-           if (results[m][0] == Txid) {
-               alreadyhere = 1;
-               console.log(results.length + " " + m + " " + results[m][0] + " " + k + " " + Txid)
-           }
-       }
-       
-       if (alreadyhere == 0) {
-           results[k] = [];
-           results[k][0] = Txid;
-           results[k][1] = Title;
-           results[k][2] = Description;
-           k = k+1;
-       }
-  })*/
+ 
   length = results.length;
   for (i=0; i<length; i++) {
       var div = document.createElement("div");
@@ -439,7 +427,7 @@ fetch(url, header).then(function(r) {
         window.location = "metahandle.php?handle=" + handle;
     }
 </script>
-<div class="searchfield"><div id="hello" class="search"></div><div id="hello2" class="search"></div><div id="hello3" class="search"></div></div>
+<div id="proxypay"></div><div class="searchfield"><div id="hello" class="search"></div><div id="hello2" class="search"></div><div id="hello3" class="search"></div></div>
 </div>
 </body>
 </html>
