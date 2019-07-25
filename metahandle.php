@@ -328,7 +328,7 @@ fetch(url, header).then(function(r) {
   for (i=0; i<length; i++) {
       var div = document.createElement("div");
        div.setAttribute("class", "search");
-       div.innerHTML = "<b>" + results[i][1] + "</b><br />" + results[i][2] + "<br /><em>" + results[i][0] + "</em><br />Lookup with: <a href='https://bico.media/" +results[i][0] + "' target='_blank'> bico.media</a>  <a href='https://www.bitcoinfiles.org/" + results[i][0] + "' target='_blank'> BitcoinFiles</a>   <a href='https://www.bitpaste.app/tx/" + results[i][0] + "' target='_blank'>BitPaste</a><br /><br />";
+       div.innerHTML = "<b>" + results[i][1] + "</b><br />" + results[i][2] + "<br /><em>" + results[i][0] + "</em><br />Lookup with: <a href='https://bico.media/" +results[i][0] + "' target='_blank'>bico.media</a> .   <a href='https://www.bitcoinfiles.org/" + results[i][0] + "' target='_blank'> BitcoinFiles</a> . <a href='https://www.bitpaste.app/tx/" + results[i][0] + "' target='_blank'>BitPaste</a> . <a href='bit://19HxigV4QyBv3tHpQVcUEQyq1pzZVdoAut/" + results[i][0] + "' target='_blank'>Bottle</a><br /><br />";
     document.body.appendChild(div)
   }
 })  
