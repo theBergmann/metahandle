@@ -2,15 +2,15 @@
 <head><meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
     <title>Metahandle - bookmark and tag onchain files onchain</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
      
     <meta name="description" content="Metahandle: Gatewaxy to Bitcoin onchain content">
   <meta name="keywords" content="metanate, BSV, onchain, opreturn, tag, bookmark">
   <link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet"> 
      <script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-    <script src="scrypt-async.js" ></script>
-    <script src="aes-js.js" ></script>
+    <script src="/assets/scrypt-async.js" ></script>
+    <script src="/assets/aes-js.js" ></script>
        <!-- <script src="bsv.min.js" ></script>-->
           <script src="//cdn.jsdelivr.net/npm/vue"></script>
   <script src="//unpkg.com/bsv@0.27.2"></script>
@@ -18,8 +18,8 @@
   <script src="//unpkg.com/qrcode-generator"></script>
         <script src="encrypt.js" ></script>
     <script src="https://asecuritysite.com/sha256.js" ></script>
-    <link rel="icon" type="image/png" href="handle-favicon.png">
-     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="/assets/handle-favicon.png">
+     <link rel="stylesheet" href="/assets/style.css">
 
     <style>
         #exclusive {
