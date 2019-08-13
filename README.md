@@ -34,35 +34,35 @@ s5-sn is for meta data like a title, an description and so on.
 
 ## handle types
 
-**010103**: Basic handle.
-"s5": E(title, handle): Title of the referenced txid, encrypted with the handle as a password. 
+**010103**: Basic handle.\
+"s5": E(title, handle): Title of the referenced txid, encrypted with the handle as a password.\ 
 "s6": E(description, handle): Description of the referenced content, encrypted with the handle as a password.
 
 Uses *create_aes_key_extra_light* from encrypt.js
 
 
 **010202**: Basic handle with encrypted txid and better title/description encryption.\
-"s4": E(txid, handle): Encrypts the txid too
-"s5": E(title, handle)
-"s6": E(description, handle)
+"s4": E(txid, handle): Encrypts the txid too\
+"s5": E(title, handle)\
+"s6": E(description, handle)\
 "s7": salt
 
 Uses *create_aes_key* from encrypt.js. This requires a salt.
 
-**010303**: Taghandle: A basic handle with up to three tags. Example with three tags
-"s5": E(title, handle)
-"s6": E(description, handle)
-"s7": salt (not really needed here)
-"s8": Hash(tag1)
-"s9": E(handle, tag1)
-"s10": Hash(tag2)
-"s11": E(handle, tag2)
-"s12": Hash(tag3)
-"s13": E(handle, tag3)
+**010303**: Taghandle: A basic handle with up to three tags. Example with three tags\
+"s5": E(title, handle)\
+"s6": E(description, handle)\
+"s7": salt (not really needed here)\
+"s8": Hash(tag1)\
+"s9": E(handle, tag1)\
+"s10": Hash(tag2)\
+"s11": E(handle, tag2)\
+"s12": Hash(tag3)\
+"s13": E(handle, tag3)\
 
 Uses *create_aes_key_extra_light* from encrypt.js. To decrypt title and description you need to first decrypt the handle
 
-**010402**: Tag handle with encrypted txid and stronger encryption. Like 010303, but with
+**010402**: Tag handle with encrypted txid and stronger encryption. Like 010303, but with\
 "s4": E(txid, handle).
 
 Uses *create_aes_key* from encrypt.js. This requires a salt.
