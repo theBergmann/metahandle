@@ -1,0 +1,106 @@
+body {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .searchinput {
+            width:95%;
+            max-width:500px;
+            height:2em;
+        }
+        
+        h1,h2,h3 a {
+            text-decoration: none;
+            color:black;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            #searchbutton {
+                margin-top:10px;
+                width:95%;
+                max-width:400px;
+                height:2.5em;
+            }
+        }
+        
+        @media only screen and (min-width: 601px) {
+            #searchbutton {
+                margin-top:-3px;
+                height:2.4em;
+            }
+        }
+        
+        
+        
+        #headline {
+            width:100%:
+            max-width:600px;
+        }
+        
+        #headline a:hover {
+            text-decoration:none;
+        }
+        
+        .area {
+            height:6em;
+        }
+        
+        .store {
+            margin-bottom:4px;
+        }
+        
+        #check1 {
+            width:95%;
+            max-width:500px;
+            text-align:left;
+            margin:auto;
+            margin-top:8px;
+        }
+        
+        #check2 {
+            width:95%;
+            max-width:500px;
+            text-align:left;
+            margin:auto;
+            margin-top:-8px;
+        }
+        
+        #checkbox {
+            margin-top:2px;
+        }
+    
+        .search {
+            text-align:left;
+            width:95%;
+            max-width:900px;
+            margin:auto;
+        }
+        
+        #mbutton {
+            text-align:center;
+        }
+        
+        #tipbutton {
+            position: relative;
+            padding: 10px;
+            margin-top:30px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        
+        #mbuttonload {
+            margin-top: -43px;
+            margin-left:10px;
+            
+        }
+        
+        .amount {
+            width:240px;
+        }
+        
+         .fav {
+          width:300px;
+          margin:auto;
+          padding-right:5%;
+
+        }
