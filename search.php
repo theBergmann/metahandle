@@ -255,6 +255,23 @@
 <script>
 
 // now we get to the core of it ...  
+
+    
+// the .htaccess has a rule, 'ErrorDocument 404 /search.php', so when someone types metahandle.net/handle, the search can catch the "handle"    
+if (typeof handlehash == 'undefined') {
+    var url = window.location;
+    url = url.toString()
+    console.log(url);
+    var urlsub = url.substring(23, 32);
+    console.log(urlsub);
+    if (urlsub !== 'search.php') {
+        handle = url.substring(23, url.length);
+        console.log(handle);
+        handlehash = hex_sha256(handle);
+    }
+}
+    
+    
 if (typeof handlehash !== 'undefined') {
 
 // searching genesis 
