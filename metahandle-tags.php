@@ -4,29 +4,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="icon" type="image/png" href="handle-favicon.png">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/assets/style.css">
      
     <meta name="description" content="Metahandle: Gatewaxy to Bitcoin onchain content">
   <meta name="keywords" content="metanate, BSV, onchain, opreturn, tag, bookmark">
   <link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet"> 
   <!--<script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>-->
-     <script src="aes-js-index.js"></script>
+     <script src="/assets/aes-js-index.js"></script>
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>-->
-    <script type="text/javascript" src="aes.js"></script>
-    <script type="text/javascript" src="scrypt-async.js" ></script>
-    <script type="text/javascript" src="aes-js.js" ></script>
-       <script type="text/javascript" src="bsv.min.js" ></script>
+    <script type="text/javascript" src="/assets/aes.js"></script>
+    <script type="text/javascript" src="/assets/scrypt-async.js" ></script>
+    <script type="text/javascript" src="/assets/aes-js.js" ></script>
+       <script type="text/javascript" src="/assets/bsv.min.js" ></script>
         <!--<script src="//cdn.jsdelivr.net/npm/vue"></script>-->
-    <script type="text/javascript" src="vue.js" ></script>
+    <script type="text/javascript" src="/assets/vue.js" ></script>
   <!--<script src="//unpkg.com/bsv@0.27.2"></script>-->
   <!--<script src="//unpkg.com/proxypay/dist/proxypay.min.js"></script>-->
-  <script type="text/javascript" src="proxypay.min.js"></script>
+  <script type="text/javascript" src="/assets/proxypay.min.js"></script>
  <!-- <script src="//unpkg.com/qrcode-generator"></script>-->
   <script src="qrcode.js"></script>
-        <script type="text/javascript" src="encrypt.js" ></script>
-    <link rel="icon" type="image/png" href="handle-favicon.png">
+        <script type="text/javascript" src="/assets/encrypt.js" ></script>
+    <link rel="icon" type="image/png" href="/assets/handle-favicon.png">
     <!--<script src="https://asecuritysite.com/sha256.js" ></script>-->
-    <script src="sha256.js" ></script>
+    <script src="/assets/sha256.js" ></script>
     
 
     
