@@ -75,7 +75,7 @@
 
 <div class="info"><br />
           <div class="fav">
-             <a href="metahandle-tags.php"><img src="handle-favicon.svg" /></a>
+             <a href="metahandle.php"><img src="handle-favicon.svg" /></a>
             </div><br /><br />
 
             <form action='metahandle.php' method='post'>
