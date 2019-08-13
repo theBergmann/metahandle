@@ -56,22 +56,30 @@
 </script>
 <script>
     function button() { 
+        // placeholder while loading the button
         document.getElementById("mbuttonload").innerHTML = "<img src='loading-40.gif' width=60px />";
         var salt = generateId(128);
+        
+        // now we get through the different types of a mb
+        // if encrypt txid is active, encrypt txid + create stronger aes key
         if (type == '010202' || type == '010401' || type == '020201' || type == 
         '020401') {
             create_aes_key(newhandle, salt);
             encrypt_it(txidd);
             txid = encryptedHex;
         }
+        // if not, create a very light aes key (faster to process)
         else {
             create_aes_key_extra_light(newhandle);
             txid = txidd;
         }
+        // encrypt description and title
         encrypt_it(description);
         encdesc = encryptedHex;
         encrypt_it(title);
         enctitle = encryptedHex;
+        
+        // if tags are active, process them ...        
         if (type == '010303' || type == '020402' || type == '010402' || type == '020303') {
             let tagarray = [];
             tagarrayclear = [];
@@ -109,12 +117,12 @@
                     tagarray.push(nexttag);
                 }
             }
-            //console.log(tagarray);
-            //console.log(tagarrayclear);
             k = 0;
             encarray = []
+            // the original handle is encrypted with the tag as a password
             for (i=0; i<tagarray.length; i++) {
                 let e = i;
+                // that's the standard handle, it used very light encryption
                 if (type == "010303" || type == "020303") {
                     create_aes_key_extra_light(tagarrayclear[e]);
                 }
@@ -126,8 +134,7 @@
                 decrypt_it(encarray[e]);
                 k++;
             }
-            
-            //var returndata = bsv.Script.buildDataOut(['1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', "" + handlehashin, "" + type, "" + txid, "" + enctitle, "" + encdesc, "" + salt]).toASM();
+            // create the data to put in the opreturn output
             switch (k) {
                 case 1:
                     var returndata = bsv.Script.buildDataOut(['1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', "" + handlehashin, "" + type, "" + txid, "" + enctitle, "" + encdesc, "" + salt, "" + tagarray[0], "" + encarray[0]]).toASM();
@@ -143,16 +150,14 @@
                     break;
             }
             
-            // learn tags, encrypt newhandle with tags, and add it to returndata
+        // if there are no tags it is really easy ...
         }
         else {
              var returndata = bsv.Script.buildDataOut(['1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', "" + handlehashin, "" + type, "" + txid, "" + enctitle, "" + encdesc, "" + salt]).toASM();
              var proxydata = "'1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', ' ', handlehashin, ' ', type, ' ', txid, ' ', enctitle, ' ', encdesc, ' ', salt";
         }
         
-        console.log(returndata);
-        console.log(proxydata);
-        
+        // if it is a value handle, the moneybutton has two outputs
         if (type == '020102' || type == '020201' || type == '020302' || type == '020401') {
             const div = document.getElementById("mbutton");
             moneyButton.render(div, {
@@ -190,8 +195,8 @@
             
         
         }
+        // if not it's easier
         else {
-            console.log(tagarrayclear);
             const div = document.getElementById("mbutton");
             moneyButton.render(div, {
               outputs: [{
@@ -223,7 +228,7 @@
 
 </script>
 <?php
-        
+        // get all the data, both from post and get
         $create = $_POST["create"];
         $newhandle = $_POST["handle"];
         $description = $_POST["description"];
@@ -238,13 +243,8 @@
         $tags = $_POST["tags"];
         $encrypt = $_POST["encrypt"];
         
-        
-        
-        
-        
-        
-        // pr端fen, was f端r ein Handle gebildet werden soll + Variablen an JavaScript 端bergeben
-        
+        // determine which handle type and transfer data from php to javascript    
+    
         if (isset($create)) {
             if (isset($encrypt)) {
                 if (isset($tags) && strlen($tags) > 5) {
@@ -303,7 +303,7 @@
                 echo "<script>publicize=\"" . $num . "\";</script>";
             }
             
-            // some of this might be unnecessary
+            // if "publicize" is activated, we need to look into the database to check if the handle already exists (in general, this should be done always)
             if (isset($publicizehandle)) {
                 if ($publicizehandle == 2) {
                     $db = mysqli_connect('', '', '', '');
@@ -317,6 +317,7 @@
                             $amount = $amount + 1;
                         }
                     }
+                    // if it is not in the database, put it in
                     if ($newentryhandle == 1) {
                         $sql = "INSERT INTO Handles (Handle, Amount) VALUES ('$savehandlename', '1')";
                         if ($db->query($sql) === TRUE) {
@@ -325,6 +326,7 @@
                             echo "Error: " . $sql . "<br>" . $sql->error;
                         }
                     }
+                    // if it's already there, increase the amount number
                     else {
                         $sql = "UPDATE Handles SET Amount = '$amount' WHERE Handle = '$savehandlename'";
                         if ($db->query($sql) === TRUE) {
@@ -360,7 +362,7 @@
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color:black">Create</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="create.php?store=1">Basic Handle</a>
+      <a class="dropdown-item" href="create.php">Basic Handle</a>
       <a class="dropdown-item" href="metahandle-exclusive.php">Exclusive Handle</a>
      <a class="dropdown-item" href="create-account-handle.php">Account Handle</a>
     </div>
