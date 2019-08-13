@@ -40,11 +40,11 @@
         document.getElementById('form').submit();
     }
     function crawl() {
-        window.location = "metahandle-tags.php";
+        window.location = "metahandle.php";
     }
     
     function store() {
-        window.location = "metahandle-tags.php?store=1";
+        window.location = "metahandle.php?store=1";
     }
     
     function submitForm(action) {
@@ -302,9 +302,11 @@
                 $num = 0;
                 echo "<script>publicize=\"" . $num . "\";</script>";
             }
+            
+            // some of this might be unnecessary
             if (isset($publicizehandle)) {
                 if ($publicizehandle == 2) {
-                    $db = mysqli_connect('localhost', 'mobymomk_system', 'Dead99preZ', 'mobymomk_mobybit');
+                    $db = mysqli_connect('', '', '', '');
                     $handledb = mysqli_query($db, "SELECT * FROM Handles");
                     $tagdb = mysqli_query($db, "SELECT * FROM Tags");
                     $newentryhandle = 1;
@@ -353,12 +355,12 @@
   <div class="collapse navbar-collapse flex-row-reverse" id="navbarNavDropdown">
     <ul class="navbar-nav">
       <li class="nav-item">
-    <a class="nav-link active" href="metahandle-tags.php">Search</a>
+    <a class="nav-link active" href="search.php">Search</a>
   </li>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color:black">Create</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="metahandle-tags.php?store=1">Basic Handle</a>
+      <a class="dropdown-item" href="create.php?store=1">Basic Handle</a>
       <a class="dropdown-item" href="metahandle-exclusive.php">Exclusive Handle</a>
      <a class="dropdown-item" href="create-account-handle.php">Account Handle</a>
     </div>
