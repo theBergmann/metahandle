@@ -42,7 +42,7 @@ Uses *create_aes_key_extra_light* from encrypt.js
 
 
 **010202**: Basic handle with encrypted txid and better title/description encryption.
-"s4": E(txid, handle): Encrypts the txid too
+   "s4": E(txid, handle): Encrypts the txid too
 "s5": E(title, handle)
 "s6": E(description, handle)
 "s7": salt
