@@ -54,7 +54,7 @@
         $tag3 = $_POST["tag3"];
         $savehandlename = $handle;
         
-        
+        // when publicize is active, we put the handle in our database ...
         if (isset($publicize)) {
                 $db = mysqli_connect('', '', '', '');
                 $handledb = mysqli_query($db, "SELECT * FROM Handles");
@@ -200,7 +200,7 @@
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color:black">Create</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="create.php?store=1">Basic Handle</a>
+      <a class="dropdown-item" href="create.php">Basic Handle</a>
       <a class="dropdown-item" href="metahandle-exclusive.php">Exclusive Handle</a>
      <a class="dropdown-item" href="create-account-handle.php">Account Handle</a>
     </div>
@@ -254,10 +254,10 @@
     
 <script>
 
+// now we get to the core of it ...  
 if (typeof handlehash !== 'undefined') {
 
-
-
+// searching genesis 
 var query = {
   "v": 3,
   "q": {
@@ -270,18 +270,16 @@ var query = {
     "sort": { "blk.i": 1 }
   }
 }
-
-
 var b64 = btoa(JSON.stringify(query));
 var url = "https://genesis.bitdb.network/q/1FnauZ9aUH2Bex6JzdcV4eNX7oLSSEbxtN/" + b64;
-
 var header = {
   headers: { key: "1CN88CMwB8wAVeoX2zm9CCZE4ZrrHDjZL5" }
 };
 
-//results = [];
 resultarray = [];
 
+// this is the base process scheme
+    
 fetch(url, header).then(function(r) {
   return r.json()
 }).then(function(r) {
@@ -301,7 +299,6 @@ fetch(url, header).then(function(r) {
                 .then(function() {
                     showResults();
                 }) 
-                
                 break;
             case "basic":
                 processResults(0)
@@ -314,19 +311,14 @@ fetch(url, header).then(function(r) {
                 break;
         }
         return(firstState)
-    })
-    
+    }) 
 })
-
 }
 
-
-
-
+// the first result is special, as if it is a valid exclusive handle we can skip all the rest
 function checkFirst() {
   return new Promise((resolve, reject) => {
       let versionNumber = results[0].out[0].s3;
-      console.log(versionNumber);
       if (versionNumber == "020501" || versionNumber == "20501") {
         checkValue(0)
         .then(function(value) {
@@ -345,9 +337,9 @@ function checkFirst() {
       }
   })
 }
-    
+
+// When we have value handles or an exclusive handle, we need to lookup the balance of the utxo. For this we use bitindex at this time.    
 function checkValue(num) {
-    console.log("checkvalue");
     return new Promise(function(resolve, reject) {
         let valueAddr = [];
         let utxo = results[num].tx.h;
@@ -358,7 +350,6 @@ function checkValue(num) {
             }
         }
         let url = "https://api.bitindex.network/api/v3/main/addr/" + valueAddr + "/utxo";  
-        console.log(url);
         fetch(url).then(function(response) {
             return response.json();
         })
@@ -378,9 +369,9 @@ function checkValue(num) {
     })
 }
 
+// each result needs to be added to the result array    
 
 function addToArray(number, value) {
-    console.log("addtoarray");
     return new Promise(function(resolve, reject) {
         let i = number;
         let versionNumber = results[i].out[0].s3;
@@ -394,6 +385,7 @@ function addToArray(number, value) {
             Salt = "null";
         }
         let Txid = results[i].out[0].s4;
+        // unfortunately, there are many different cases and versions. Starting with a handle with tags ...
         if (versionNumber == '010301' || versionNumber == '010401' || versionNumber == '020301' || versionNumber == '020401' || versionNumber == '010302' || versionNumber == '020302' || versionNumber == '020303' || versionNumber == '020402' || versionNumber == '010303' || versionNumber == '010402') {
             console.log("process taghandle");
             processTagHandle(i)
@@ -410,7 +402,7 @@ function addToArray(number, value) {
             })
         }    
         else {
-            console.log("no tag");
+            // depending on the version number the handles are encrypted differently
             if (versionNumber == "010103" || versionNumber == "010302" || versionNumber == "020102" || versionNumber == "020302") {
                 create_aes_key_extra_light(handle);
             }
@@ -425,6 +417,7 @@ function addToArray(number, value) {
             Title = decryptedText;
             decrypt_it(Description);
             Description = decryptedText;
+            // some might have an encrypted transaction id.
             if (versionNumber == "010201" || versionNumber == "020201" || versionNumber == "010402" || versionNumber == "020401" || versionNumber == "010202" || versionNumber == "010203") {
                 decrypt_it(Txid);
                 Txid = decryptedText;
@@ -437,6 +430,8 @@ function addToArray(number, value) {
         }
     })
 }
+
+// process all the handles found    
     
 function processResults(num) {
     return new Promise(function(resolve, reject) {
@@ -474,9 +469,7 @@ function processResults(num) {
 }
     
 
-
-
-    
+// a tag handle needs a special execution    
 function processTagHandle(number) {
     let i = number;
     let encHandle;
@@ -546,11 +539,10 @@ function processTagHandle(number) {
         }
     })
 }
-        
+
+// results are sorted due to age and value. Duplicates are deleated    
  
 function sortResults() {
-    console.log(resultarray.length);
-    console.log(resultarray);
     if (resultarray.length > 1) {
         for (let i=0; i<resultarray.length; i++) {
             // if a valid exclusive handle is the first entry, all other entries are deleted. If it has no value, it is deleted itself.
@@ -569,9 +561,6 @@ function sortResults() {
         // now we check for double entries. If two handle reference to the same txid, the handlewith the lower value is deleted. If both have no value, the older stays.
         for (let i=0; i<resultarray.length; i++) {
            for (let j = 0; j<resultarray.length; j++) {
-               console.log(i);
-               console.log(j);
-               console.log(resultarray);
                if ((resultarray[i][1] == resultarray[j][1]) && (i != j) ) {
                    if ((resultarray[j][0] == '020101' || resultarray[j][0] == '020201' || resultarray[j][0] == '020301' || resultarray[j][0] == '020401' || resultarray[j][0] == '020102' || resultarray[j][0] == '020302') && ( resultarray[i][0] != "020101" || resultarray[i][0] != "020201" || resultarray[i][0] != "020301" || resultarray[i][0] != "020401" || resultarray[i][0] != "020302" || resultarray[i][0] != "020102" )) {
                         resultarray.splice(i, 1);
@@ -604,7 +593,6 @@ function sortResults() {
             } 
         }
         resultarray.sort(function(a, b) {
-            //console.log("sorting" + a[4] + " l " + b[4]);
             if (a[4] < b[4]) {
                 return  1;
             }
@@ -612,13 +600,14 @@ function sortResults() {
                 return -1;
             }
             else {
-                //console.log("nothing to sort");
             }
             return 0;
         });
     }
 }
 
+// finally, reslts are shown    
+    
 function showResults() {
     document.getElementById("hello").innerHTML = "";
     for (let i=0; i<resultarray.length; i++) {
@@ -628,8 +617,6 @@ function showResults() {
                 h32 = "</h3>";
                 word = "<br /><strong><span style='color:#008000'> Exclusive Handle! Value " + resultarray[i][4] + "</span></strong>";
         }
-        //var div = document.createElement("div");
-        //div.setAttribute("class", "search");
         else if (resultarray[i][0] == "020101" || resultarray[i][0] == "020201" || resultarray[i][0] == "020301" || resultarray[i][0] == "020401"  || resultarray[i][0] == "020302" || resultarray[i][0] == "020102") {
             word = "<br /><strong><span style='color:#008000'> value " + resultarray[i][4] + "</span></strong>";
             if (i == 0) {
