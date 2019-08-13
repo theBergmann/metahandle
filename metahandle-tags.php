@@ -44,12 +44,12 @@
   <div class="collapse navbar-collapse flex-row-reverse" id="navbarNavDropdown">
     <ul class="navbar-nav">
       <li class="nav-item">
-    <a class="nav-link active" href="metahandle-tags.php">Search</a>
+    <a class="nav-link active" href="metahandle.php">Search</a>
   </li>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color:black">Create</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="metahandle-tags.php?store=1">Basic Handle</a>
+      <a class="dropdown-item" href="metahandle.php?store=1">Basic Handle</a>
       <a class="dropdown-item" href="metahandle-exclusive.php">Exclusive Handle</a>
      <a class="dropdown-item" href="create-account-handle.php">Account Handle</a>
     </div>
@@ -80,7 +80,7 @@
              <a href="metahandle-tags.php"><img src="handle-favicon.svg" /></a>
             </div><br /><br />
 
-            <form action='metahandle-tags.php' method='post'>
+            <form action='metahandle.php' method='post'>
             <input type='text' name='handle' class='searchinput'></input><br /><br />
             <button class='btn btn-outline-success btn-lg' id='searchbutton' type='submit' formaction='search.php' style='margin-left:1em'>Search</button>&nbsp;&nbsp;
             <button class='btn btn-outline-info btn-lg' id='searchbutton' type='submit' formaction='create.php'>Create</button><br />
@@ -89,7 +89,7 @@
             </div><br /><br />
             <?php
                 echo "<h2>Popular Handles*</h2><br />";
-                $db = mysqli_connect('localhost', 'mobymomk_system', 'Dead99preZ', 'mobymomk_mobybit');
+                $db = mysqli_connect('', '', '', '');
                 $handledb = mysqli_query($db, "SELECT * FROM Handles");
                 $tagdb = mysqli_query($db, "SELECT * FROM Tags");
                 $publichandles = [];
