@@ -1,5 +1,5 @@
 <html>
-<head>
+<head><meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
@@ -36,12 +36,6 @@
                 margin-top:-3px;
                 height:2.4em;
             }
-        }
-        
-        p {
-            text-align:left;
-            margin-left:20%;
-            margin-right:20%;
         }
         
         #headline {
@@ -100,6 +94,14 @@
             left: 0;
             right: 0;
         }
+        
+        @media only screen and (min-width: 1261px) {
+            #navigation { 
+                position:fixed;  
+                margin-top:25px;
+            }
+        }
+        
     </style>
     <script>
     function submitform(){
@@ -115,23 +117,109 @@
     </script>
 </head>
 
-<body class="text-center">
-    <div id="headline">
-        <a href="metahandle.php">
-            <pre><font size="10">Metahandle</font></pre>
-            <pre><font size="5">Store or Crawl a Metahandle</font></pre><br/>
-        </a>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light "  style="background-color: white;font-size:20px">
+     <a class="navbar-brand" id="navigation" href="metahandle.php">
+        <img src="handle-favicon.svg" width="70" alt="">
+      </a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+     
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse flex-row-reverse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+    <a class="nav-link active" href="metahandle-tags.php">Search</a>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color:black">Create</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="metahandle-tags.php?store=1">Basic Handle</a>
+      <a class="dropdown-item" href="metahandle-exclusive.php">Exclusive Handle</a>
+     <a class="dropdown-item" href="create-account-handle.php">Account Handle</a>
     </div>
-    <button type="button" class="btn btn-outline-info btn-lg" onclick="crawl()">Crawl</button>
-    <button type="button" class="btn btn-outline-success btn-lg " onclick="store()" style="margin-left:1em">Store</button>
-    <br /><br /><br />
-    <div class="info">
-        <h3>What is MetaHandle?</h3>
-        <font size="4"><p>A major problem of onchain content is that it is referenced by a transaction id, which is impossible to memorize. The result is that you need to keep long lists of bookmarks with onchain links or transaction ids.</p>
-        <p>MetaHandles solves this problem by introducing human readable references for txids, which are stored onchain. This allows you to bookmark or tag any onchain file with an immutable handle which is always accesable.</p>
-        <p>MetaHandles can be used in a lot of ways, both privately and publically. They are basically just <em>any</em> reference to any txid.</p>
-        <h3>Quick Start</h3>
-        <p>You don't want to forget an onchain file you found? Just store it as a handle.</p><p>Click on the Store button, set a handle, copy the transaction id, write a title and a description. If you want to use your handle only as a private bookmark, activate encryption of the txid. If you want your handle to be publicly shown on the metahandle site, activate "publicize handle". In this case your handle will be stored in our database.</p>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"  style="color:black">Account</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="create-account-handle.php">Register</a>
+      <a class="dropdown-item" href="login-account-handle.php">Login</a>
+      <a class="dropdown-item" href="send-message.php">Send Message</a>
+    </div>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"  style="color:black">About Metahandle</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="about.html">About us</a>
+      <a class="dropdown-item" href="docu.html">Documentation</a>
+      <a class="dropdown-item" href="blog.html">Blog</a>
+    </div>
+  </li>
+    </ul>
+    <a class="navbar-brand" href="metahandle.php" style="font-size:20px">Metahandle</a>
+  </div>
+</nav><br /><br />
+
+
+
+    <div class="container-fluid" id="basecontainer">
+    <div class="row">
+        <div class="col-sm-2">
+            <nav class="nav flex-column" id="navigation">
+  <strong>Using Metahandle</strong>
+  <a class="nav-link active" href="docu.html#what">What is Metahandle</a>
+  <a class="nav-link" href="docu.html#why">Why Metahandle</a>
+  <a class="nav-link" href="docu.html#basic">Create a Basic Handle</a>
+  <a class="nav-link" href="docu.html#value">Create a Value Handle</a>
+  <a class="nav-link" href="docu.html#exclusive">Create an Exclusive Handle</a>
+  <a class="nav-link" href="docu.html#search">Search an Handle</a>
+  <a class="nav-link" href="docu.html#share">Share an Handle</a>
+  <strong>Understanding Metahandle</strong>
+  <a class="nav-link" href="docudevs.html#structure">The structure of a Metahandle</a>
+  <a class="nav-link" href="docudevs.html#types">Types of Handles</a>
+  <a class="nav-link" href="docudevs.html#analyze">Analye a Handle transaction</a>
+  <a class="nav-link" href="docudevs.html#querryl">Querry a Handle</a>
+  <a class="nav-link" href="docudevs.html#structurevalue">Querry a Value Handle</a>
+  <a class="nav-link" href="docudevs.html#encryption">About the used encryption</a>
+</nav>
+        </div>
+        <div class="col-sm-6">
+        <h3 id="what">What is MetaHandle?</h3>
+        <font size="4"><p>MetaHandles are Bitcoin transactions which reference to another transaction and a keyword chosen by the users. This enables a user to search for a keyword and find another transaction.</p>
+        <h3 id="why">Why you need MetaHandle</h3>
+         <font size="4"><p>A major problem of onchain content is that it is referenced by a transaction id, like <code>0478a101336483d878bccec3c82bb97e8aea7f0c3c4dbf65c1ef910957b558c8</code> which is impossible to memorize. The result is that you need to keep long lists of bookmarks with onchain links or transaction ids.</p><p>MetaHandle solves this problem by allowing you to create bookmarks or tags for any onchain content. Beside this they allow you to add value to a transaction or to claim an exclusive handle for a keyword.</p>
+        <h3 id="basic">Creating a Basic Handle</h3>
+        <p>The Basic Handle can be just used like a bookmark or a tag. You can use a common word, like "blog", "game" or "bitcoin" to reference to an onchain content. This word can be used to tag many transactions and thus become some kind of overview. At the same time, you can use a more specific handle - or a password - to access files more privately.</p>
+        <p>A step-by-step-guide to create a basic handle:</p>
+        <img src="basic-handle-1.png" width="500px" />
+        <p>You have a picture - here is one of my Dog Ruedie - on the blockchain. To access it you usually go to some kind of content-explorer like <a href="https://bico.media/0478a101336483d878bccec3c82bb97e8aea7f0c3c4dbf65c1ef910957b558c8">bico.media</a> and search for the transaction ID. This is very unconvenient, as you hardly memorize the transaction ID.</p>
+        <p>To make it easier, you can create a MetaHandle, either by clicking in the top menue on <a href="create.php">"create"</a> or by just typing the handle you want in the search field and clicking on the "create" button. In this case the handle form will already know the name of your handle.</p>
+        <img src="basic-handle-2.jpg" width="500px" />
+        <p>After doing so you land on the creation page. Here you can paste in your transaction ID, set a title and a description.</p>
+        <img src="basic-handle-3.jpg" width="500px" />
+        <p>Handle name, transaction ID, title and description are the minimum required fields. But there are more options for your handle:</p>
+        <img src="basic-handle-4.jpg" width="500px" />
+        <p>There are two checkboxes. The first allows you to encrypt the transaction id in the handle. This can help you to keep a private collection of handles safe against injections. If you use a password for your private handles, like a private bookmarking list, this is recommended.</p><p>The next option is to publicize the handle. If you activate it, the handle name will be stored in our (offchain) database and announced on the frontpage of MetaHandle.net. This might help you to get pubclicity for your content.</p>
+        <img src="basic-handle-5.jpg" width="500px" />
+        <p>Further, you can add up to three tags to your handle. If someone searched those tags on Metahandle.net, like "bestdog", "pet", "animal", "dog", he will find the handle. The next option, "add value", will create a <a href="#value">Value Handle</a>, which we will explain in the next section.</p>
+        <p>After you filled the handle form, you click on the "Create Handle" button. Then you will be forwarded to the next site - you have to initiate the transaction.</p>
+        <img src="basic-handle-6.jpg" width="500px" />
+        <p>On the checkout you can initiate the transaction either with <a href="https://www.moneybutton.com">Monybutton</a> or with <a href="https://github.com/libitx/proxypay">ProxyPay</a>. Please be careful with ProxyPay, it is a nice concept, but sometimes not so reliable.</p>
+        <p>After the handle is created, you are forwarded to the search results for this handle. And as we see - we can now access my dog Ruedie very easily.</p>
+        <img src="basic-handle-7.jpg" width="500px" />
+        <h3 id="value">Create a Value Handle</h3>    
+        <p>When you create an Handle, you have the option to add value. This basically means that the handle transaction will have another output with monetary value in BSV. As long as this output is unspent, the handle will be valid. Since you can chose the address by yourself, the coins will fully remain under your control.</p>
+        <p>When there are several handles on the same word - like with <a href="search.php?handle=blog">the tag "blog"</a> - they are sorted by value. Also, if the same handle for the same transaction exists twice, only the one with the highest value is shown. This allows you to use Value Handles to update an Handle.</p>
+        <img src="value-handle-1.jpg" width="500px" />
+        <p>To create one you do the same like <a href="#basic">creating a basic handle</a> - but you also set an address and an amount. I used <a href="https://electrumsv.io/">Electrum SV</a> to create a new address and write in the description for what it is used. With Electrum you have the option to free coins, so the input you receive will. </p>
+        <img src="value-handle-2.jpg" width="500px" />
+        <p>Then paste the address in the field, and set an amount in Satoshi to add to the Handle. This is how your handle creation form should look like:</p>
+        <img src="value-handle-3.jpg" width="500px" />
+        <p>After you set this, just click on the "Create Handle" button and initiate the transaction with MoneyButton or ProxyPay. You created a Value Handle. But beware that you don't spent the output accidently.</p>
+        <h3 id="exclusive">Create an Exclusive Handle</h3>
+        </p>    
+            You don't want to forget an onchain file you found? Just store it as a handle.</p><p>Click on the Store button, set a handle, copy the transaction id, write a title and a description. If you want to use your handle only as a private bookmark, activate encryption of the txid. If you want your handle to be publicly shown on the metahandle site, activate "publicize handle". In this case your handle will be stored in our database.</p>
         <p>When you have stored your handle you can access your files by crawling the handle.</p>
         <h3>Data Structure</h3>
         <p>The data structure of MetaHandles is very simple. It can be extended with further use cases:</p>
@@ -167,17 +255,7 @@
 <script src="https://www.moneybutton.com/moneybutton.js"></script>
 
 <div id="hello" class="search"></div>
-<div id="tipbutton">
-    <div class="money-button"
-      data-to="1BergmanNpFqZwALMRe8GHJqGhtEFD3xMw",
-      data-amount="0.01",
-      data-currency="USD",
-      data-editable="true",
-      data-label="Tip us!"
-    ></div>
-    
-    
-</div>
+
 </body>
 </html>
 

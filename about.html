@@ -1,0 +1,226 @@
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+     <link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet"> 
+    <script type="text/javascript" src="https://unpkg.com/bsv@0.26.4/bsv.min.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .searchinput {
+            width:95%;
+            max-width:500px;
+            height:2em;
+        }
+        
+        h1,h2,h3 a {
+            text-decoration: none;
+            color:black;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            #searchbutton {
+                margin-top:10px;
+                width:95%;
+                max-width:400px;
+                height:2.5em;
+            }
+        }
+        
+        @media only screen and (min-width: 601px) {
+            #searchbutton {
+                margin-top:-3px;
+                height:2.4em;
+            }
+        }
+        
+
+        
+        #headline {
+            width:100%:
+            max-width:400px;
+        }
+        
+        .info {
+            width:100%;
+            max-width:1000px;
+            margin:auto;
+        }
+        
+        #headline a:hover {
+            text-decoration:none;
+        }
+        
+        .area {
+            height:6em;
+        }
+        
+        .store {
+            margin-bottom:4px;
+        }
+        
+        #check1 {
+            width:95%;
+            max-width:500px;
+            text-align:left;
+            margin:auto;
+            margin-top:8px;
+        }
+        
+        #check2 {
+            width:95%;
+            max-width:500px;
+            text-align:left;
+            margin:auto;
+            margin-top:-8px;
+        }
+        
+        #checkbox {
+            margin-top:2px;
+        }
+    
+        .search {
+            text-align:left;
+            width:95%;
+            max-width:900px;
+            margin:auto;
+        }
+        
+        #mbutton {
+            text-align:center;
+        }
+        
+        #tipbutton {
+            position: relative;
+            padding: 10px;
+            margin-top:30px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .fav {
+          width:200px;
+          margin-left:35%;
+
+        }
+    </style>
+    <script>
+    function submitform(){
+        document.getElementById('form').submit();
+    }
+    function crawl() {
+        window.location = "metahandle.php";
+    }
+    
+    function store() {
+        window.location = "metahandle.php?store=1";
+    }
+    
+
+
+    </script>
+</head>
+
+
+<nav class="navbar navbar-expand-lg navbar-light "  style="background-color: white;font-size:20px">
+     <a class="navbar-brand" href="metahandle.php">
+        <img src="handle-favicon.svg" width="70" alt="">
+      </a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+     
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse flex-row-reverse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+    <a class="nav-link active" href="metahandle-tags.php">Search</a>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color:black">Create</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="metahandle-tags.php?store=1">Basic Handle</a>
+      <a class="dropdown-item" href="metahandle-exclusive.php">Exclusive Handle</a>
+     <a class="dropdown-item" href="create-account-handle.php">Account Handle</a>
+    </div>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"  style="color:black">Account</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="create-account-handle.php">Register</a>
+      <a class="dropdown-item" href="login-account-handle.php">Login</a>
+      <a class="dropdown-item" href="send-message.php">Send Message</a>
+    </div>
+  </li>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"  style="color:black">About Metahandle</a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" href="about.html">About us</a>
+      <a class="dropdown-item" href="docu.html">Documentation</a>
+      <a class="dropdown-item" href="blog.html">Blog</a>
+    </div>
+  </li>
+    </ul>
+    <a class="navbar-brand" href="metahandle.php" style="font-size:20px">Metahandle</a>
+  </div>
+</nav><br /><br />
+
+
+
+
+
+
+
+
+
+
+    <div class="container" style="margin-top:-3%">
+    <div class="row">
+        <div class="col-10">
+       <h2>What is Metahandle?</h2>
+       <p>Metahandle is a platform to interact with the BSV blockchain. It allows to create and crawl so called Metahandles. These are BSV transactions whose OP_Return output contains a word chosen by the user and some more information. Their basic use case is to reference other transactions containing content with a human readable name. Beyond this there are many further use cases of Metahandles.</p>
+       <h2>Owner of Metahandle</h2>
+       <p><b>MOBY Verlagshaus</b><br />Postfach 1<br />89276 Nersingen<br />Germany<br /><br />CEO: Christoph Bergmann<br />christoph@metahandle.net</p>
+       <h2>Social and Code</h2>
+       <p>Twitter: <a href="https://twitter.com/Metahandle9">@Metahandle9</a><br />Telegram: <a href="https://t.me/metahandle">Metahandle</a><br />Slack: <a href="https://bitdb.network/atlantis">Atlantis Slack</a></p>
+       <p>Github: <a href="https://github.com/theBergmann/metahandle">theBergmann/metahandle</a><br />
+       <h2>Terms of Service</h2>
+       <p>Metahandle.net is just an interface between the users and the blockchain. It is not responsible for the availability of the BSV blockchain or the integrity of the data. <br />It is not allowed to use Metahandle to reference to transactions containing illicit content.</p>
+       <h2>Privacy Protection</h2>
+       <p>Metahandle.net does not store, process or share any private data and doesn't want to change this. Period. <br />If it ever happens that Metahandle.net starts processing private data the privacy protection explanation will be updated.<br /><br /></p>
+        </div>
+    <div id="mbutton"></div>
+       
+<script src="https://www.moneybutton.com/moneybutton.js"></script>
+<script src="https://www.moneybutton.com/moneybutton.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!--
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>-->
+
+
+<script>
+
+<div id="hello" class="search"></div>
+<div id="tipbutton">
+    <div class="money-button"
+      data-to="1BergmanNpFqZwALMRe8GHJqGhtEFD3xMw",
+      data-amount="0.01",
+      data-currency="USD",
+      data-editable="true",
+      data-label="Tip us!"
+    ></div>
+    
+    
+</div>
+</body>
+</html>
+
+<!-- https://github.com/odedhb/AES-encrypt/blob/master/index.html -->
