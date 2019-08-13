@@ -37,18 +37,12 @@
 </head>
 
 <script>
-    function submitform(){
-        document.getElementById('form').submit();
-    }
+    // button() creates the moneybutton / proxypay field to initiate the transaction composing the metahandle
     
-    function store() {
-        window.location = "metahandle-exclusive.php?store=1";
-    }
-    
-</script>
-<script>
     function button() { 
+        // the type of the exclusive handle        
         type = "020501";
+        // check if there is already a handle with this word. If so, don't build.
         var query = {
           "v": 3,
           "q": {
@@ -61,15 +55,11 @@
             "sort": { "blk.i": 1 }
           }
         }
-
-
         var b64 = btoa(JSON.stringify(query));
         var url = "https://genesis.bitdb.network/q/1FnauZ9aUH2Bex6JzdcV4eNX7oLSSEbxtN/" + b64;
-        
         var header = {
           headers: { key: "1CN88CMwB8wAVeoX2zm9CCZE4ZrrHDjZL5" }
         };
-        
         fetch(url, header).then(function(r) {
           return r.json()
         }).then(function(r) {
@@ -80,90 +70,18 @@
                 console.log(total);
                 document.getElementById("mbutton").innerHTML = "Sorry, this handle does already exist. To register an exclusive handle, you have to be the first. <a href='metahandle-exclusive.php'>Try another word.</a>";
             } 
+            // now start creating exclusive handle
             else {
-               document.getElementById("mbuttonload").innerHTML = "<img src='loading-40.gif' width=60px />";
-                var salt = generateId(128);
+                document.getElementById("mbuttonload").innerHTML = "<img src='loading-40.gif' width=60px />";
+                let salt = generateId(128);
                 create_aes_key(newhandle, salt);
                 encrypt_it(description);
                 encdesc = encryptedHex;
                 encrypt_it(title);
                 enctitle = encryptedHex;
-                if (type == '010202' || type == '010401' || type == '020201' || type == 
-                '020401') {
-                    encrypt_it(txidd);
-                    txid = encryptedHex;
-                }
-                else {
-                    txid = txidd;
-                }
-                
-                if (type == '010301' || type == '010401' || type == '020301' || type == '020401') {
-                    var tagarray = [];
-                    var tagends = [];
-                    length = tags.length;
-                    for (i=0; i<length; i++) {
-                        var char = tags.substr(i,1);
-                        if (char == ",") {
-                            tagends.push(i);
-                            if (tagends.length == 1) {
-                                var onetag = tags.substr(0,i);
-                                onetag = hex_sha256(onetag);
-                                tagarray.push(onetag);
-                            }
-                            else if (tagends.length == 2) {
-                                var tagstart = tagends[0] + 1;
-                                if (tags.substr(tagstart,1) == " ") {
-                                    tagstart = tagstart + 1;
-                                }
-                                var nexttag = tags.substr(tagstart, (i - tagstart));
-                                nexttag = hex_sha256(nexttag);
-                                tagarray.push(nexttag);
-                            }
-                        }
-                        else if (i == (length - 1)) {
-                            var tagstart = tagends[1] + 1;
-                            if (tags.substr(tagstart,1) == " ") {
-                                tagstart = tagstart + 1;
-                            }
-                            var nexttag = tags.substr(tagstart, i);
-                            nexttag = hex_sha256(nexttag);
-                            tagarray.push(nexttag);
-                        }
-                    }
-                    k = 0;
-                    encarray = []
-                    for (i=0; i<tagarray.length; i++) {
-                        create_aes_key_old(tagarray[i], salt);
-                        encrypt_it(newhandle);
-                        encarray.push(encryptedHex);
-                        k++;
-                    }
-                    decrypt_it(encarray[0]);
-
-                    switch (k) {
-                        case 1:
-                            var returndata = bsv.Script.buildDataOut(['1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', "" + handlehash, "" + type, "" + txid, "" + enctitle, "" + encdesc, "" + salt, "" + tagarray[0], "" + encarray[0]]).toASM();
-                            var proxydata = "'1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', ' ', handlehash, ' ', type, ' ', txid, ' ', enctitle, ' ', encdesc, ' ', salt, ' ', '" + tagarray[0] + "', ' ', '" + encarray[0] + "'";
-                            break;
-                        case 2:
-                            var returndata = bsv.Script.buildDataOut(['1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', "" + handlehash, "" + type, "" + txid, "" + enctitle, "" + encdesc, "" + salt, "" + tagarcray[0], "" + encarray[0], "" + tagarray[1], "" + encarray[1]]).toASM();
-                            var proxydata = "'1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', ' ', handlehash, ' ', type, ' ', txid, ' ', enctitle, ' ', encdesc, ' ', salt, ' ', '" + tagarray[0] + "', ' ', '" + encarray[0] + "', ' ', '" + tagarray[1] + "', ' ', '" + encarray[1] + "'";
-                            break;
-                        case 3:
-                            var returndata = bsv.Script.buildDataOut(['1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', "" + handlehash, "" + type, "" + txid, "" + enctitle, "" + encdesc, "" + salt, "" + tagarray[0], "" + encarray[0], "" + tagarray[1], "" + encarray[1], "" + tagarray[2], "" + encarray[2]]).toASM();
-                            var proxydata = "'1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', ' ', handlehash, ' ', type, ' ', txid, ' ', enctitle, ' ', encdesc, ' ', salt, ' ', '" + tagarray[0] + "', ' ', " + encarray[0] + ", ' ', '" + tagarray[1] + "', ' ', '" + encarray[1] + "', ' ', '" + tagarray[2]  + "', ' ', '" + encarray[2] + "'";
-                            break;
-                    }
-                    
-                    // learn tags, encrypt newhandle with tags, and add it to returndata
-                }
-                else {
-                     var returndata = bsv.Script.buildDataOut(['1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', "" + handlehash, "" + type, "" + txid, "" + enctitle, "" + encdesc, "" + salt]).toASM();
-                     var proxydata = "'1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', ' ', handlehash, ' ', type, ' ', txid, ' ', enctitle, ' ', encdesc, ' ', salt";
-                }
-                        
-                
-                
+                txid = txidd;
+                let returndata = bsv.Script.buildDataOut(['1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', "" + handlehash, "" + type, "" + txid, "" + enctitle, "" + encdesc, "" + salt]).toASM();
+                let proxydata = "'1NYJFDJbcSS2xGhGcxYnQWoh4DAjydjfYU', ' ', handlehash, ' ', type, ' ', txid, ' ', enctitle, ' ', encdesc, ' ', salt";          
                 const div = document.getElementById("mbutton");
                 moneyButton.render(div, {
                     outputs: [
@@ -211,6 +129,8 @@
         $address = $_POST["address"];
         $encrypt = $_POST["encrypt"];
         
+        // site either loads the form for handle creation or it loads the moneybutton to create the handle
+    
         if (isset($newhandle) && strlen($newhandle) > 0) {
             $handlehash = hash('sha256', $newhandle);
             echo "<script>handlehash=\"" . $handlehash . "\"; newhandle=\"" . $newhandle . "\"; description =\"" . $description . "\"; title=\"" . $title . "\"; txidd=\"" . $txid . "\"; address=\"" . $address . "\"; </script>";
@@ -236,12 +156,12 @@
   <div class="collapse navbar-collapse flex-row-reverse" id="navbarNavDropdown">
     <ul class="navbar-nav">
       <li class="nav-item">
-    <a class="nav-link active" href="metahandle-tags.php">Search</a>
+    <a class="nav-link active" href="search.php">Search</a>
   </li>
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color:black">Create</a>
     <div class="dropdown-menu">
-      <a class="dropdown-item" href="metahandle-tags.php?store=1">Basic Handle</a>
+      <a class="dropdown-item" href="create.php?store=1">Basic Handle</a>
       <a class="dropdown-item" href="metahandle-exclusive.php">Exclusive Handle</a>
      <a class="dropdown-item" href="create-account-handle.php">Account Handle</a>
     </div>
@@ -279,8 +199,8 @@
         <p id='exclusivetext'>You are about to create an exclusive handle. This handle references to only ONE transaction id. It is valid, as long as it is the first to claim it, and as long as it is backed by 0.1 BSV which are deposited to an address of your choice. </p>
         <p><b>The BSV remain always under your control. When you spent them, you give away ownership of the exclusive handle</b></p>
         </div>
-        <a href='docu.html'>What is this about? Read the docu!</a><br /><br />
-            <form action='metahandle-exclusive.php' method='post'>
+        <br />
+        <form action='metahandle-exclusive.php' method='post'>
             <input type='text' name='newhandle' placeholder=
             'your handle / password' id='textin' class='searchinput store' required></input><br />
             <input type='text' name='txid' placeholder='the txid you want to reference' id='textin' class='searchinput store' pattern=
